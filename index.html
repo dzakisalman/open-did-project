@@ -1,126 +1,146 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>OPEN DID Project</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f5f5;
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Open DID - Digital Identity System</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>tailwind.config = {darkMode: "class", theme: {extend: {colors: {primary: "#000000", "background-light": "#f7f7f7", "background-dark": "#191919", "foreground-light": "#0d141b", "foreground-dark": "#f6f7f8", "subtle-light": "#4c739a", "subtle-dark": "#a0b3c6", "border-light": "#cfdbe7", "border-dark": "#34475a"}, fontFamily: {display: "Inter"}, borderRadius: {DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", full: "9999px"}}}};</script>
+<style>
+        .form-textarea {
+            transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
         }
-        .container {
-            background-color: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        .form-textarea:focus {
+            --tw-ring-color: transparent;
+            border-color: #137fec;
+            box-shadow: 0 0 0 2px rgba(19, 127, 236, 0.2);
         }
-        h1 {
-            color: #333;
-            text-align: center;
-            margin-bottom: 30px;
+        .btn {
+            transition: all 0.2s ease-in-out;
         }
-        button {
-            background-color: #007bff;
-            color: white;
-            padding: 12px 24px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin: 10px 5px;
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-        button:hover {
-            background-color: #0056b3;
-        }
-        .result {
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-radius: 5px;
-            padding: 15px;
-            margin: 15px 0;
-            word-break: break-all;
-        }
-        .label {
-            font-weight: bold;
-            color: #495057;
-            margin-bottom: 5px;
-        }
-        .wallet-info {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-            margin-top: 20px;
-        }
-        .wallet-section {
-            background-color: #e9ecef;
-            padding: 15px;
-            border-radius: 5px;
+         .btn:active {
+            transform: translateY(0);
+            box-shadow: none;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <h1>🔐 Buat Identitas Digital (DID)</h1>
-        
-        <div style="text-align: center;">
-            <button id="createDidBtn">Buat DID</button>
-            <button id="createWalletBtn">Buat Wallet DID</button>
-            <button id="clearBtn">Hapus Data</button>
-        </div>
+<body class="bg-background-light dark:bg-background-dark font-display text-foreground-light dark:text-foreground-dark antialiased">
+<div class="relative flex min-h-screen w-full flex-col">
+<header class="sticky top-0 z-50 w-full bg-background-light/80 dark:bg-background-dark/80 backdrop-blur-sm">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex h-16 items-center justify-between border-b border-border-light dark:border-border-dark">
+<div class="flex items-center gap-4">
+<svg class="h-8 w-8 text-primary" fill="none" viewbox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+<path d="M42.4379 44C42.4379 44 36.0744 33.9038 41.1692 24C46.8624 12.9336 42.2078 4 42.2078 4L7.01134 4C7.01134 4 11.6577 12.932 5.96912 23.9969C0.876273 33.9029 7.27094 44 7.27094 44L42.4379 44Z" fill="currentColor"></path>
+</svg>
+<h1 class="text-xl font-bold">Open DID</h1>
+</div>
+<nav class="hidden items-center gap-8 md:flex">
+<a class="text-sm font-medium text-foreground-light dark:text-foreground-dark hover:text-primary dark:hover:text-primary transition-colors" href="#">Home</a>
+<a class="text-sm font-medium text-subtle-light dark:text-subtle-dark hover:text-primary dark:hover:text-primary transition-colors" href="#">About</a>
+<a class="text-sm font-medium text-subtle-light dark:text-subtle-dark hover:text-primary dark:hover:text-primary transition-colors" href="#">Documentation</a>
+</nav>
+<div class="flex items-center gap-4">
+<button class="btn hidden sm:flex min-w-[84px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 bg-primary text-white text-sm font-bold shadow-sm">
+<span>Sign In</span>
+</button>
+<button class="md:hidden p-2 rounded-lg bg-primary/10 dark:bg-primary/20 text-primary">
+<svg class="h-6 w-6" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 6h16M4 12h16m-7 6h7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</div>
+</div>
+</div>
+</header>
+<main class="flex-1">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12 md:py-20">
+<div class="mx-auto max-w-3xl text-center">
+<h2 class="text-3xl font-extrabold tracking-tight sm:text-4xl md:text-5xl">
+                        Decentralized Digital Identity System
+                    </h2>
+<p class="mt-4 max-w-2xl mx-auto text-lg text-subtle-light dark:text-subtle-dark">
+                        Explore the concepts of decentralized digital identity (DID), JWT implementation, digital wallets, and web interface interaction.
+                    </p>
+</div>
+<div class="mt-12 max-w-4xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<button id="createDidBtn" class="btn flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary text-white text-base font-bold shadow-sm">
+<span>Create DID</span>
+</button>
+<button id="createJwtBtn" class="btn flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary/10 dark:bg-primary/20 text-primary font-bold shadow-sm">
+<span>Generate JWT</span>
+</button>
+<button id="createWalletBtn" class="btn flex w-full cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 bg-primary/10 dark:bg-primary/20 text-primary font-bold shadow-sm">
+<span>Create Wallet</span>
+</button>
+</div>
+</div>
+<div class="mt-16">
+<h3 class="text-2xl font-bold tracking-tight text-center">Generated Information</h3>
+<div class="mt-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium" for="did-output">DID</label>
+<textarea class="form-textarea w-full resize-none rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark p-4 text-sm placeholder:text-subtle-light dark:placeholder:text-subtle-dark focus:border-primary" id="did-output" placeholder="Your generated DID will appear here..." rows="8"></textarea>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium" for="jwt-output">JWT</label>
+<textarea class="form-textarea w-full resize-none rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark p-4 text-sm placeholder:text-subtle-light dark:placeholder:text-subtle-dark focus:border-primary" id="jwt-output" placeholder="Your generated JWT will appear here..." rows="8"></textarea>
+</div>
+<div class="flex flex-col gap-2">
+<label class="text-sm font-medium" for="wallet-output">Wallet Information</label>
+<textarea class="form-textarea w-full resize-none rounded-lg bg-background-light dark:bg-background-dark border border-border-light dark:border-border-dark p-4 text-sm placeholder:text-subtle-light dark:placeholder:text-subtle-dark focus:border-primary" id="wallet-output" placeholder="Your wallet details will appear here..." rows="8"></textarea>
+</div>
+</div>
+</div>
+</div>
+</main>
+<footer class="bg-background-light dark:bg-background-dark border-t border-border-light dark:border-border-dark">
+<div class="container mx-auto px-4 sm:px-6 lg:px-8 py-6">
+<p class="text-center text-sm text-subtle-light dark:text-subtle-dark">© 2024 Open DID Project. All rights reserved.</p>
+</div>
+</footer>
+</div>
 
-        <div id="didDisplay" class="result" style="display: none;">
-            <div class="label">DID:</div>
-            <div id="didValue"></div>
-        </div>
-
-        <div id="jwtDisplay" class="result" style="display: none;">
-            <div class="label">JWT:</div>
-            <div id="jwtValue"></div>
-        </div>
-
-        <div id="walletDisplay" class="result" style="display: none;">
-            <div class="label">Wallet DID:</div>
-            <div id="walletValue"></div>
-        </div>
-
-        <div id="walletInfo" class="wallet-info" style="display: none;">
-            <div class="wallet-section">
-                <div class="label">Private Key:</div>
-                <div id="privateKey"></div>
-            </div>
-            <div class="wallet-section">
-                <div class="label">Public Key:</div>
-                <div id="publicKey"></div>
-            </div>
-        </div>
-    </div>
-
-    <script>
+<script>
         async function createDid() {
             // DID sederhana
             const did = 'did:example:' + Math.random().toString(36).substring(2, 15);
-            document.getElementById('didValue').innerText = did;
-            document.getElementById('didDisplay').style.display = 'block';
+            document.getElementById('did-output').value = did;
+
+            // Simpan ke localStorage
+            localStorage.setItem('userDID', did);
+            
+            console.log('DID dibuat:', did);
+        }
+
+        function createJWT() {
+            const storedDID = localStorage.getItem('userDID');
+            if (!storedDID) {
+                alert('Please create a DID first!');
+                return;
+            }
 
             // Membuat JWT (di browser, pakai library lain atau simulasikan)
             const payload = { 
                 data: 'Contoh data untuk DID', 
-                did: did,
+                did: storedDID,
                 timestamp: new Date().toISOString()
             };
             const jwt = btoa(JSON.stringify(payload)); // simulasi JWT sederhana
-            document.getElementById('jwtValue').innerText = jwt;
-            document.getElementById('jwtDisplay').style.display = 'block';
+            document.getElementById('jwt-output').value = jwt;
 
             // Simpan ke localStorage
-            localStorage.setItem('userDID', did);
             localStorage.setItem('userJWT', jwt);
             
-            console.log('DID dan JWT dibuat:', { did, jwt });
+            console.log('JWT dibuat:', jwt);
         }
 
         function createWallet() {
@@ -131,32 +151,12 @@
                 createdAt: new Date().toISOString()
             };
 
-            document.getElementById('walletValue').innerText = JSON.stringify(wallet, null, 2);
-            document.getElementById('walletDisplay').style.display = 'block';
-            
-            document.getElementById('privateKey').innerText = wallet.privateKey;
-            document.getElementById('publicKey').innerText = wallet.publicKey;
-            document.getElementById('walletInfo').style.display = 'grid';
+            document.getElementById('wallet-output').value = JSON.stringify(wallet, null, 2);
 
             // Simpan ke localStorage
             localStorage.setItem('userWallet', JSON.stringify(wallet));
             
             console.log('Wallet DID dibuat:', wallet);
-        }
-
-        function clearData() {
-            // Hapus dari DOM
-            document.getElementById('didDisplay').style.display = 'none';
-            document.getElementById('jwtDisplay').style.display = 'none';
-            document.getElementById('walletDisplay').style.display = 'none';
-            document.getElementById('walletInfo').style.display = 'none';
-            
-            // Hapus dari localStorage
-            localStorage.removeItem('userDID');
-            localStorage.removeItem('userJWT');
-            localStorage.removeItem('userWallet');
-            
-            console.log('Data dihapus');
         }
 
         function loadStoredData() {
@@ -165,32 +165,25 @@
             const storedWallet = localStorage.getItem('userWallet');
 
             if (storedDID) {
-                document.getElementById('didValue').innerText = storedDID;
-                document.getElementById('didDisplay').style.display = 'block';
+                document.getElementById('did-output').value = storedDID;
             }
 
             if (storedJWT) {
-                document.getElementById('jwtValue').innerText = storedJWT;
-                document.getElementById('jwtDisplay').style.display = 'block';
+                document.getElementById('jwt-output').value = storedJWT;
             }
 
             if (storedWallet) {
                 const wallet = JSON.parse(storedWallet);
-                document.getElementById('walletValue').innerText = JSON.stringify(wallet, null, 2);
-                document.getElementById('walletDisplay').style.display = 'block';
-                document.getElementById('privateKey').innerText = wallet.privateKey;
-                document.getElementById('publicKey').innerText = wallet.publicKey;
-                document.getElementById('walletInfo').style.display = 'grid';
+                document.getElementById('wallet-output').value = JSON.stringify(wallet, null, 2);
             }
         }
 
         // Event listeners
         document.getElementById('createDidBtn').addEventListener('click', createDid);
+        document.getElementById('createJwtBtn').addEventListener('click', createJWT);
         document.getElementById('createWalletBtn').addEventListener('click', createWallet);
-        document.getElementById('clearBtn').addEventListener('click', clearData);
 
         // Load stored data when page loads
         window.addEventListener('load', loadStoredData);
     </script>
-</body>
-</html>
+</body></html>
